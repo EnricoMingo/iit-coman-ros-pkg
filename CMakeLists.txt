@@ -1,28 +1,26 @@
-cmake_minimum_required(VERSION 2.8)
-PROJECT(iit-coman-ros-pkg)
+#  Copyright (c) 2025 MeRLin
+#
+#  Licensed under the Apache License, Version 2.0 (the "License");
+#  you may not use this file except in compliance with the License.
+#  You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+#  Unless required by applicable law or agreed to in writing, software
+#  distributed under the License is distributed on an "AS IS" BASIS,
+#  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+#  See the License for the specific language governing permissions and
+#  limitations under the License.
 
-add_custom_target(  acm
-                    COMMAND ${CMAKE_SOURCE_DIR}/coman_urdf/script/create_acm.sh coman)
+cmake_minimum_required(VERSION 3.5)
+project(iit-coman-ros-pkg)
+find_package(ament_cmake REQUIRED)
 
-add_custom_target(	remove_old_coman_urdf_gazebo ALL
-    				COMMAND ${CMAKE_COMMAND} -E remove_directory 
-        			"~/.gazebo/models/coman_urdf/")
 
-add_custom_target(  remove_old_coman_gazebo ALL
-                    COMMAND ${CMAKE_COMMAND} -E remove_directory 
-                    "~/.gazebo/models/coman/")
+# Install launch files.
+install(DIRECTORY
+  launch meshes urdf
+  DESTINATION share/${PROJECT_NAME}/
+)
 
-add_custom_target(  compile_urdf_sdf ALL
-                    COMMAND ${CMAKE_SOURCE_DIR}/coman_urdf/script/create_urdf_srdf_sdf.sh coman)
-
-if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
-    add_custom_target(	copy_coman_gazebo ALL
-        				COMMAND ${CMAKE_COMMAND} -E copy_directory 
-            			"${PROJECT_SOURCE_DIR}/coman_gazebo/sdf/" 
-            			"~/.gazebo/models/coman/"
-            			DEPENDS remove_old_coman_gazebo)
-endif()
-
-# install urdf and srdf folders in the correct path
-install(DIRECTORY coman_urdf/urdf/ DESTINATION "${CMAKE_INSTALL_PREFIX}/share/robots/coman/urdf") #FILES_MATCHING PATTERN "*.urdf / .srdf"
-install(DIRECTORY coman_srdf/srdf/ DESTINATION "${CMAKE_INSTALL_PREFIX}/share/robots/coman/srdf") #FILES_MATCHING PATTERN "*.urdf / .srdf"
+ament_package()
