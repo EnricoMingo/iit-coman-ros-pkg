@@ -23,4 +23,10 @@ install(DIRECTORY
   DESTINATION share/${PROJECT_NAME}/
 )
 
+install(FILES
+  coman.rviz
+  DESTINATION share/${PROJECT_NAME}/
+)
+
+
 ament_package()
